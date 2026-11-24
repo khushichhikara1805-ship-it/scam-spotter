@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Statistics{% endblock %}
+{% block content %}
+<h1 class="page">&#128202; Scam statistics</h1>
+<p class="sub">Live numbers from every message checked in this app.</p>
+
+{% if s.total == 0 %}
+  <div class="card">No checks yet. <a href="{{ url_for('home') }}">Check a few messages</a> and the charts will appear here.</div>
+{% else %}
+<div class="tiles">
+  <div class="tile a"><strong>{{ s.total }}</strong><span>Messages checked</span></div>
+  <div class="tile b"><strong>{{ s.avg }}</strong><span>Average risk score</span></div>
+  <div class="tile c"><strong>{{ s.levels['High Risk'] }}</strong><span>High Risk found</span></div>
+  <div class="tile d"><strong>{{ s.reports }}</strong><span>Scams reported</span></div>
+</div>
+
+<div class="two">
+  <div class="card accent">
+    <h3>Risk levels</h3>
+    <div class="donutwrap">
+      <div class="donut" style="background: {{ donut }}"><div><strong>{{ s.total }}</strong><small>checks</small></div></div>
+      <ul class="legend">
+        <li><i style="background:#13b981"></i>Low Risk <b>{{ s.levels['Low Risk'] }}</b></li>
+        <li><i style="background:#ff9f1c"></i>Suspicious <b>{{ s.levels['Suspicious'] }}</b></li>
+        <li><i style="background:#ef3b5c"></i>High Risk <b>{{ s.levels['High Risk'] }}</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent">
+    <h3>Languages</h3>
+    {% set lmax = [s.languages.values()|max, 1]|max %}
+    {% for name, color in [('English','#6c3df4'),('Hinglish','#ff4d9d'),('Hindi','#12c2e9')] %}
+    <div class="barrow"><span class="bl">{{ name }}</span>
+      <div class="track"><div class="fill" style="width: {{ (s.languages[name] * 100 / lmax)|round }}%; background: {{ color }}"></div></div>
+      <b>{{ s.languages[name] }}</b></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card accent">
+  <h3>Most common warning signs</h3>
+  {% if s.top_signs %}
+    {% set tmax = s.top_signs[0][1] %}
+    {% for name, count in s.top_signs %}
+    <div class="barrow"><span class="bl wide">{{ name }}</span>
+      <div class="track"><div class="fill" style="width: {{ (count * 100 / tmax)|round }}%; background: linear-gradient(90deg,#ff4d9d,#ff9f43)"></div></div>
+      <b>{{ count }}</b></div>
+    {% endfor %}
+  {% else %}<p class="sub">No warning signs found yet.</p>{% endif %}
+</div>
+
+<div class="card accent">
+  <h3>Checks in the last 7 days</h3>
+  {% set dmax = [s.days|map(attribute='count')|max, 1]|max %}
+  <div class="cols">
+    {% for d in s.days %}
+    <div class="col"><b>{{ d.count }}</b><div class="bar" style="height: {{ (d.count * 100 / dmax)|round }}px"></div><small>{{ d.label }}</small></div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

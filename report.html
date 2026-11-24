@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Report a Scam{% endblock %}
+{% block content %}
+<h1 class="page">&#128226; Report a scam</h1>
+<p class="sub">Help others stay safe. Share a scam message you received.</p>
+
+{% if done %}<div class="card okcard">&#9989; <b>Thank you!</b> Your report has been saved. Total reports so far: <b>{{ total }}</b>.</div>{% endif %}
+
+<div class="card accent">
+  <form method="post" action="{{ url_for('report') }}">
+    <label for="source">Where did you get it?</label>
+    <select name="source" id="source">{% for s in sources %}<option>{{ s }}</option>{% endfor %}</select>
+    <label for="rmessage">Scam message</label>
+    <textarea name="message" id="rmessage" rows="5" maxlength="5000" placeholder="Paste the scam message here..."></textarea>
+    <p class="error">{{ error or '' }}</p>
+    <button type="submit">&#128228; Submit report</button>
+  </form>
+</div>
+
+<div class="card sos">
+  <h3>&#128680; Lost money? Act fast</h3>
+  <p>Call the cyber crime helpline <b>1930</b> right away and report at <b>cybercrime.gov.in</b>. The first hour matters most.</p>
+  <p class="small">Reports in this app are saved only on this computer for your project demo. They are not sent to the police.</p>
+</div>
+
+{% if recent %}
+<h3>Recently reported</h3>
+{% for r in recent %}
+<div class="card hist highrisk"><div class="top"><span class="badge highrisk">{{ r.source }}</span><span class="when">{{ r.created_at }}</span></div>
+<p class="msg">{{ r.message[:140] }}{% if r.message|length > 140 %}...{% endif %}</p></div>
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Scam Spotter{% endblock %} | Digital Dignity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="wrap bar">
+      <a class="brand" href="{{ url_for('home') }}">&#128737;&#65039; Digital Dignity <span>Scam Spotter</span></a>
+      <nav>
+        <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' }}">Check</a>
+        <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint == 'history' }}">History</a>
+        <a href="{{ url_for('tips') }}" class="{{ 'active' if request.endpoint == 'tips' }}">Safety Tips</a>
+      </nav>
+    </div>
+  </header>
+  {% block hero %}{% endblock %}
+  <main class="wrap {% block mainclass %}{% endblock %}">{% block content %}{% endblock %}</main>
+  <footer>MCA Minor Project &middot; Khushi Chhikara (12017704426) &middot; Mentor: Dr. Cosmena<br>Results are warnings to review, not a guarantee.</footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

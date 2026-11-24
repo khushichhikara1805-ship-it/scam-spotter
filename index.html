@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block hero %}
+<section class="hero">
+  <h1>Is this message a <em>scam?</em></h1>
+  <p>Paste any SMS, WhatsApp or email text and spot the warning signs before you click, pay or share.</p>
+  <div class="pills"><span>&#9889; Instant check</span><span>&#128274; Nothing leaves your computer</span><span>&#128161; Safety tips</span></div>
+</section>
+{% endblock %}
+{% block mainclass %}pull{% endblock %}
+{% block content %}
+<div class="card accent">
+  <label for="example">&#10024; Try an example</label>
+  <select id="example">
+    <option value="">-- choose an example --</option>
+    {% for e in examples %}<option value="{{ e }}">{{ e[:60] }}{% if e|length > 60 %}...{% endif %}</option>{% endfor %}
+  </select>
+
+  <label for="message">&#128172; Message</label>
+  <textarea id="message" rows="6" maxlength="5000" placeholder="Paste the SMS, WhatsApp or email text here..."></textarea>
+  <button id="check">&#128269; Check Message</button>
+  <p id="error" class="error" role="alert"></p>
+</div>
+
+<div id="result" class="card result hidden" aria-live="polite">
+  <div class="top">
+    <div class="verdict"><div class="badge" id="level"></div><p id="verdict-text"></p></div>
+    <div class="meter" id="meter"><div><span><strong id="score">0</strong><br><small>/100 risk</small></span></div></div>
+  </div>
+  <h3>&#128681; Why?</h3>
+  <ul id="reasons" class="chips"></ul>
+  <h3>&#9989; What you should do</h3>
+  <ul id="tips" class="tipbox"></ul>
+  <p class="disclaimer">This is a warning to review, not a guarantee that the message is (or is not) fraudulent.</p>
+</div>
+
+<div class="steps">
+  <div class="step s1"><b>1</b>Paste the message you received</div>
+  <div class="step s2"><b>2</b>We scan it for 8 types of scam signs</div>
+  <div class="step s3"><b>3</b>Get a risk score and safety advice</div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='script.js') }}"></script>{% endblock %}
